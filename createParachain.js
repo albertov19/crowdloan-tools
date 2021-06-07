@@ -1,16 +1,22 @@
+/* Create Parachain
+  Script to reserve Parachain ID and register it. 
+  Check createParachain.js file for Parachain ID reservation and Registration
+  Provide the Account Prefix (1 - Polkadot, 2 - Kusama, 42 - Generic Substrate)
+  Provide the number of accounts to create
+*/
 import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import * as fs from 'fs';
 
-const data = JSON.parse(fs.readFileSync('./accounts.json'));
-
 // Global Variables
+const accountPrefix = 42;
 let paraID;
 // Account funded
 const { whaleMNEMONIC } = JSON.parse(fs.readFileSync('./whale-account.json'));
+const data = JSON.parse(fs.readFileSync('./accounts.json'));
 
 // Create a keyring instance
-const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+const keyring = new Keyring({ type: 'sr25519', ss58Format: accountPrefix });
 
 // Create Provider
 const wsProvider = new WsProvider('ws://localhost:9944');
@@ -53,7 +59,7 @@ const main = async () => {
   // Add Whale Account
   const whaleAccount = keyring.createFromUri(whaleMNEMONIC, {
     name: 'sr25519',
-    ss58Format: 2,
+    ss58Format: accountPrefix,
   });
 
   // Wait for Provider

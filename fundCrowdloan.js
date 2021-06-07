@@ -1,16 +1,23 @@
+/* Fund Crowdloan
+  Script to fund a crowdloan with a given Parachain ID
+  It loads a set of funded accounts from the accounts.json file (check createAccounts and fundAccounts)
+  Provide the Account Prefix (1 - Polkadot, 2 - Kusama, 42 - Generic Substrate)
+  Provide the contribute ammount
+*/
 import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import * as fs from 'fs';
 
-const data = JSON.parse(fs.readFileSync('./accounts.json'));
-
 // Global Variables
+const accountPrefix = 42;
 const paraID = 2000;
 // Balance to Transfer
-const minDeposit = 1000000000000;
-const contributeAmount = (100 * minDeposit) / 2;
+const minDeposit = 1000000000000; //Do not modify unless you know what you're doing
+const contributeAmount = 1 * minDeposit;
+// Accounts with funds
+const data = JSON.parse(fs.readFileSync('./accounts.json'));
 // Create a keyring instance
-const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+const keyring = new Keyring({ type: 'sr25519', ss58Format: accountPrefix });
 
 // Create Provider
 const wsProvider = new WsProvider('ws://localhost:9944');
@@ -21,7 +28,7 @@ const fundCrowdloan = async (api) => {
     // Add Account
     let account = keyring.createFromUri(data.mnemonics[i], {
       name: 'sr25519',
-      ss58Format: 2,
+      ss58Format: accountPrefix,
     });
 
     // Contribute to Crowdloan
