@@ -10,7 +10,7 @@ import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
 // Global Variables
 const accountPrefix = 42;
 // Number of accounts to Create
-const nAccounts = 1000;
+const nAccounts = 6000;
 
 const createAccount = async () => {
   // Initialize WASM

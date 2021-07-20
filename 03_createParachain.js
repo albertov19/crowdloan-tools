@@ -19,7 +19,7 @@ const data = JSON.parse(fs.readFileSync('./accounts.json'));
 const keyring = new Keyring({ type: 'sr25519', ss58Format: accountPrefix });
 
 // Create Provider
-const wsProvider = new WsProvider('ws://localhost:9944');
+const wsProvider = new WsProvider('wss://wss-relay.testnet.moonbeam.network');
 
 const reservePara = async (whaleAccount, api) => {
   // Reserve Parachain ID
@@ -28,9 +28,7 @@ const reservePara = async (whaleAccount, api) => {
     .reserve()
     .signAndSend(whaleAccount, { nonce: -1 }, async ({ status }) => {
       if (status.isFinalized) {
-        console.log(
-          `✔️  - Finalized at block hash #${status.asFinalized.toString()} \n`
-        );
+        console.log(`✔️  - Finalized at block hash #${status.asFinalized.toString()} \n`);
         await registerPara(whaleAccount, api);
         unsub();
       }
@@ -44,9 +42,7 @@ const registerPara = async (whaleAccount, api) => {
     .register(paraID, '0x11', '0x11')
     .signAndSend(whaleAccount, { nonce: -1 }, async ({ status }) => {
       if (status.isFinalized) {
-        console.log(
-          `✔️  - Finalized at block hash #${status.asFinalized.toString()} \n`
-        );
+        console.log(`✔️  - Finalized at block hash #${status.asFinalized.toString()} \n`);
         unsub();
       }
     });

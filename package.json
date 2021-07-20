@@ -1,8 +1,29 @@
 {
-   "type": "module",
-   "dependencies": {
-      "@polkadot/api": "^4.12.1",
-      "@polkadot/keyring": "^6.6.1",
-      "@polkadot/util-crypto": "^6.6.1"
-   }
+  "name": "crowdloan",
+  "version": "1.0.0",
+  "description": "## Get Started",
+  "main": "createAccounts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertov19/crowdloan-tools.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/albertov19/crowdloan-tools/issues"
+  },
+  "homepage": "https://github.com/albertov19/crowdloan-tools#readme",
+  "dependencies": {
+    "@polkadot/api": "^4.15.1",
+    "@polkadot/keyring": "^6.9.1",
+    "@polkadot/util-crypto": "^6.9.1",
+    "@substrate/api-sidecar": "^7.0.4",
+    "ethers": "^5.4.1",
+    "moonbeam-types-bundle": "^1.1.22"
+  },
+  "type": "module"
 }
