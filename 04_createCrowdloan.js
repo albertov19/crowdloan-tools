@@ -7,6 +7,7 @@
 */
 import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
+import { formatBalance } from '@polkadot/util';
 import * as fs from 'fs';
 
 // Global Variables
@@ -14,7 +15,7 @@ const accountPrefix = 42;
 const paraID = 2002;
 // Balance to Transfer
 const minDeposit = 1000000000000; //Do not modify unless you know what you're doing
-const crowdloanCap = 20000 * minDeposit;
+const crowdloanCap = 100000 * minDeposit;
 // Account funded
 const { whaleMNEMONIC } = JSON.parse(fs.readFileSync('./whale-account.json'));
 
@@ -24,6 +25,9 @@ const keyring = new Keyring({ type: 'sr25519', ss58Format: accountPrefix });
 // Create Provider
 const wsProvider = new WsProvider('wss://wss-relay.testnet.moonbeam.network');
 
+// Calculate the Formatted Crowdloan Cap
+const formattedCap = formatBalance(BigInt(crowdloanCap), { withSi: true, withUnit: 'UNIT' }, 12);
+
 const createCrowdloan = async (whaleAccount, api) => {
   // Get Current Block
   const block = (await api.query.system.number()).words[0];
@@ -31,7 +35,7 @@ const createCrowdloan = async (whaleAccount, api) => {
   // Create Crowdloan for 50 blocks
   console.log(`🤖 - Creating Crowdloan for Parachain ${paraID}`);
   let unsub = await api.tx.crowdloan
-    .create(paraID, crowdloanCap, 1, 3, block + 500, null)
+    .create(paraID, formattedCap, 1, 3, block + 500, null)
     .signAndSend(whaleAccount, { nonce: -1 }, async ({ status }) => {
       if (status.isFinalized) {
         console.log(`✔️  - Finalized at block hash #${status.asFinalized.toString()} \n`);
